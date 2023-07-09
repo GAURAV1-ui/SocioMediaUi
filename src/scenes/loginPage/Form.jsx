@@ -109,7 +109,7 @@ const Form = () => {
       validationSchema={isLogin ? loginSchema : registerSchema}
     >
       {({
-        values, 
+        values,
         errors,
         touched,
         handleBlur,
