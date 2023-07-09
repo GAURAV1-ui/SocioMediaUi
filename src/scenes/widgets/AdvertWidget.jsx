@@ -1,73 +1,38 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
-import PostWidget from "./PostWidget";
+import { Typography, useTheme } from "@mui/material";
+import FlexBetween from "components/FlexBetween";
+import WidgetWrapper from "components/WidgetWrapper";
 
-const PostsWidget = ({ userId, isProfile = false }) => {
-  const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts);
-  const token = useSelector((state) => state.token);
-
-  const getPosts = async () => {
-    const response = await fetch("http://localhost:3001/posts", {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    dispatch(setPosts({ posts: data }));
-  };
-
-  const getUserPosts = async () => {
-    const response = await fetch(
-      `http://localhost:3001/posts/${userId}/posts`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    const data = await response.json();
-    dispatch(setPosts({ posts: data }));
-  };
-
-  useEffect(() => {
-    if (isProfile) {
-      getUserPosts();
-    } else {
-      getPosts();
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+const AdvertWidget = () => {
+  const { palette } = useTheme();
+  const dark = palette.neutral.dark;
+  const main = palette.neutral.main;
+  const medium = palette.neutral.medium;
 
   return (
-    <>
-      {posts.map(
-        ({
-          _id,
-          userId,
-          firstName,
-          lastName,
-          description,
-          location,
-          picturePath,
-          userPicturePath,
-          likes,
-          comments,
-        }) => (
-          <PostWidget
-            key={_id}
-            postId={_id}
-            postUserId={userId}
-            name={`${firstName} ${lastName}`}
-            description={description}
-            location={location}
-            picturePath={picturePath}
-            userPicturePath={userPicturePath}
-            likes={likes}
-            comments={comments}
-          />
-        )
-      )}
-    </>
+    <WidgetWrapper>
+      <FlexBetween>
+        <Typography color={dark} variant="h5" fontWeight="500">
+          Sponsored
+        </Typography>
+        <Typography color={medium}>Create Ad</Typography>
+      </FlexBetween>
+      <img
+        width="100%"
+        height="auto"
+        alt="advert"
+        src="http://localhost:3001/assets/info4.jpeg"
+        style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
+      />
+      <FlexBetween>
+        <Typography color={main}>MikaCosmetics</Typography>
+        <Typography color={medium}>mikacosmetics.com</Typography>
+      </FlexBetween>
+      <Typography color={medium} m="0.5rem 0">
+        Your pathway to stunning and immaculate beauty and made sure your skin
+        is exfoliating skin and shining like light.
+      </Typography>
+    </WidgetWrapper>
   );
 };
 
-export default PostsWidget;
+export default AdvertWidget;
